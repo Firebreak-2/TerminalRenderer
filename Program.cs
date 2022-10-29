@@ -8,7 +8,7 @@ internal static class Program
     {
         TerminalDisplay display = new();
 
-        display.Draw(TerminalRectangle.Centered(default, 3, 3, new TerminalPixel(Color.Aqua)));
+        display.Draw(new TerminalLine(default, new Point(14, 4), new TerminalPixel(Color.Aqua)));
         display.Render();
         
         Console.ReadKey(true);
