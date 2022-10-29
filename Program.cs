@@ -8,9 +8,16 @@ internal static class Program
     {
         TerminalDisplay display = new();
 
-        display.Draw(new TerminalLine(default, new Point(14, 4), new TerminalPixel(Color.Aqua)));
-        display.Render();
-        
-        Console.ReadKey(true);
+        int y = 0;
+        while (true)
+        {
+            display.Draw(new TerminalPixel(Color.Aqua)
+            {
+                Position = new Point(0, -(y++ % TerminalDisplay.DefaultViewOffset.Y * 2) - TerminalDisplay.DefaultViewOffset.Y)
+            });
+            
+            display.Render();
+            Thread.Sleep(8);
+        }
     }
 }

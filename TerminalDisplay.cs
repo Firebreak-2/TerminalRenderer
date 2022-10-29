@@ -15,7 +15,7 @@ public class TerminalDisplay
         _renderList.Add(terminalRenderable);
         return terminalRenderable;
     }
-    
+
     public T Draw<T>(T terminalRenderable) where T : ITerminalRenderable
     {
         foreach (TerminalPixel pixel in terminalRenderable.Render())
@@ -55,15 +55,16 @@ public class TerminalDisplay
                 // gets the current point with the camera offset
                 var currentPoint = new Point(x + ViewOffset.X, y + ViewOffset.Y);
 
-                string toWrite = "  ";
+                // checks if any point draws on the current pixel and uses it
+                // if none are found, uses default
+                if (pointsToRender.TryGetValue(currentPoint, out var pixel)) ;
+                else pixel = new TerminalPixel();
                 
-                // checks if any point draws on the current pixel and uses its color
-                if (pointsToRender.TryGetValue(currentPoint, out var pixel))
-                {
-                    toWrite = pixel.PixelContent.PastelBg(pixel.Color);
-                }
+                string colorizedContent = pixel.PixelContent
+                    .PastelBg(pixel.BackgroundColor)
+                    .Pastel(pixel.ForegroundColor);
 
-                Console.Write(toWrite);
+                Console.Write(colorizedContent);
             }
 
             Console.WriteLine();
