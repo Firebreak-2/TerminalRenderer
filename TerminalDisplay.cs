@@ -6,12 +6,22 @@ namespace TerminalRenderer;
 public class TerminalDisplay
 {
     private List<ITerminalRenderable> _renderList = new();
+    private Dictionary<Point, TerminalPixel> _pixelDrawList = new();
     public Point ViewOffset = DefaultViewOffset;
     public static Point DefaultViewOffset = new((-Console.WindowWidth / 2 - 1) / 2, (-Console.WindowHeight - 1) / 2);
 
-    public T Draw<T>(T terminalRenderable) where T : ITerminalRenderable
+    public T Add<T>(T terminalRenderable) where T : ITerminalRenderable
     {
         _renderList.Add(terminalRenderable);
+        return terminalRenderable;
+    }
+    
+    public T Draw<T>(T terminalRenderable) where T : ITerminalRenderable
+    {
+        foreach (TerminalPixel pixel in terminalRenderable.Render())
+        {
+            _pixelDrawList.Add(pixel.Position, pixel);
+        }
         return terminalRenderable;
     }
 
@@ -31,6 +41,12 @@ public class TerminalDisplay
         {
             pointsToRender[pixel.Position] = pixel;
         }
+
+        foreach (var (pos, pixel) in _pixelDrawList)
+        {
+            pointsToRender[pos] = pixel;
+        }
+        _pixelDrawList.Clear();
 
         for (int y = 0; y < screenHeight; y++)
         {
