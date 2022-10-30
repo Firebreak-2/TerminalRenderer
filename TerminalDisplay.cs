@@ -20,7 +20,7 @@ public class TerminalDisplay
     {
         foreach (TerminalPixel pixel in terminalRenderable.Render())
         {
-            _pixelDrawList.Add(pixel.Position, pixel);
+            _pixelDrawList[pixel.Position] = pixel;
         }
         return terminalRenderable;
     }
