@@ -1,15 +1,19 @@
+using System.Diagnostics;
 using System.Drawing;
 
 namespace TerminalRenderer;
 
+[DebuggerDisplay("({Position.X}, {Position.Y}) | {BackgroundColor.Name}")]
 public struct TerminalPixel : ITerminalRenderable
 {
     public Point Position = Point.Empty;
     public Color BackgroundColor = Color.Black;
-    public Color ForegroundColor = Color.Transparent;
+    public Color ForegroundColor = Color.White;
     
     private string _pixelContent = "  ";
     public static int PixelContentLength = 2;
+
+    public static TerminalPixel Default = new();
 
     public string PixelContent
     {
@@ -41,6 +45,22 @@ public struct TerminalPixel : ITerminalRenderable
     {
         BackgroundColor = color;
     }
+
+    public TerminalPixel(Point position)
+    {
+        Position = position;
+    }
+
+    public bool EquivalentTo(TerminalPixel b)
+    {
+        return BackgroundColor.ToArgb() == b.BackgroundColor.ToArgb()
+               && ForegroundColor.ToArgb() == b.ForegroundColor.ToArgb()
+               && _pixelContent == b._pixelContent;
+    }
+
+    public Point GetFramePosition(Point viewOffset) => new(Position.X - viewOffset.X, Position.Y - viewOffset.Y);
+    
+    public Point GetFramePosition(TerminalDisplay display) => GetFramePosition(display.ViewOffset);
     
     public IEnumerable<TerminalPixel> Render() => new[] {this};
 }

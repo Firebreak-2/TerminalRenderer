@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace TerminalRenderer;
 
@@ -7,7 +8,7 @@ internal static class Program
     public static void Main(string[] args)
     {
         TerminalDisplay display = new();
-
+        
         int y = 0;
         while (true)
         {
