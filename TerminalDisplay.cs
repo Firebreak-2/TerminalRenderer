@@ -6,7 +6,6 @@ namespace TerminalRenderer;
 
 public class TerminalDisplay
 {
-    private List<ITerminalRenderable> _renderList = new();
     private Dictionary<Point, TerminalPixel> _pixelDrawList = new();
     public Point ViewOffset = DefaultViewOffset;
     public int Width = DefaultWidth;
@@ -32,12 +31,6 @@ public class TerminalDisplay
         }
     }
 
-    public T Add<T>(T terminalRenderable) where T : ITerminalRenderable
-    {
-        _renderList.Add(terminalRenderable);
-        return terminalRenderable;
-    }
-
     public T Draw<T>(T terminalRenderable) where T : ITerminalRenderable
     {
         foreach (TerminalPixel pixel in terminalRenderable.Render())
@@ -55,8 +48,6 @@ public class TerminalDisplay
     {
         Console.SetCursorPosition(0, 0);
 
-        Dictionary<Point, TerminalPixel> pointsToRender = GetPointsToRender();
-
         if (!_firstFrameRendered)
         {
             for (int y = 0; y < Height; y++)
@@ -68,7 +59,7 @@ public class TerminalDisplay
 
                     // checks if any point draws on the current pixel and uses it
                     // if none are found, uses default
-                    if (pointsToRender.TryGetValue(currentPoint, out var pixel)) ;
+                    if (_pixelDrawList.TryGetValue(currentPoint, out var pixel)) ;
                     else pixel = new TerminalPixel(currentPoint);
 
                     Write(pixel, _writeColumnIndex++, _writeRowIndex);
@@ -79,7 +70,7 @@ public class TerminalDisplay
         }
         else
         {
-            IEnumerable<TerminalPixel> pointDifference = Diff(_previousFrame, pointsToRender);
+            IEnumerable<TerminalPixel> pointDifference = Diff(_previousFrame, _pixelDrawList);
 
             foreach (var pixel in pointDifference)
             {
@@ -127,28 +118,6 @@ public class TerminalDisplay
         }
     }
 
-    private Dictionary<Point, TerminalPixel> GetPointsToRender()
-    {
-        Dictionary<Point, TerminalPixel> pointsToRender = new();
-
-        // gets pixels of .Add objects in memory
-        foreach (TerminalPixel pixel in _renderList.SelectMany(item => item.Render()))
-        {
-            pointsToRender[pixel.Position] = pixel;
-        }
-
-        // gets pixels of .Draw function calls
-        foreach (var (pos, pixel) in _pixelDrawList)
-        {
-            pointsToRender[pos] = pixel;
-        }
-
-        _pixelDrawList.Clear();
-
-
-        return pointsToRender;
-    }
-
     private void Write(TerminalPixel pixel, int x, int y, bool modifyPos = false)
     {
         if (modifyPos)
@@ -178,6 +147,7 @@ public class TerminalDisplay
 
         _writeRowIndex = 0;
         _writeColumnIndex = 0;
+        _pixelDrawList.Clear();
 
         _firstFrameRendered = true;
     }
