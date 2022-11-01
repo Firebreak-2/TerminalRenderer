@@ -21,7 +21,7 @@ public class TerminalDisplay
     private TerminalPixel[][] _previousFrame;
     private bool _firstFrameRendered = false;
 
-    public Rectangle _renderRegion => new (CameraPosition.X, CameraPosition.Y, Width, Height);
+    private Rectangle _renderRegion => new (CameraPosition.X, CameraPosition.Y, Width, Height);
 
     public TerminalDisplay()
     {

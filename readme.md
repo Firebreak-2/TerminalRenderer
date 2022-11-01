@@ -1,6 +1,14 @@
-﻿using System.Drawing;
-using TerminalRenderer;
+# TerminalRenderer
+The TerminalRenderer library is one that makes it easy to render shapes and images directly in the terminal.
 
+### External Libraries
+* [Pastel](https://github.com/silkfire/Pastel): for custom background and foreground color usage in the terminal
+* [ImageSharp](https://github.com/SixLabors/ImageSharp): as a cross-platform means of loading, using, or generating images to render in the terminal
+
+# Example
+
+Code:
+```csharp
 TerminalDisplay display = new();
 
 // create a new pixel with a content of "* "
@@ -34,3 +42,11 @@ display.Draw(new TerminalPolygon(pixel with {ForegroundColor = Color.Beige}, new
 display.Render();
 
 Console.ReadLine(); // pause execution
+```
+Output:
+![The render output](https://i.imgur.com/u57ezfi.png)
+
+# More Advanced Rendering
+This library allows and is optimized for rendering more than once. This means that animations or dynamic rendering is possible.
+![Rainbow spinny thing](https://i.imgur.com/GT6VjUg.gif)
+
