@@ -7,19 +7,21 @@ namespace TerminalRenderer;
 public class TerminalDisplay
 {
     private Dictionary<Point, TerminalPixel> _pixelDrawList = new();
-    public Point ViewOffset = DefaultViewOffset;
+    public Point CameraPosition = DefaultCameraPosition;
     public int Width = DefaultWidth;
     public int Height = DefaultHeight;
 
     public static int DefaultWidth = Console.WindowWidth / 2 - 1;
     public static int DefaultHeight = Console.WindowHeight - 1;
-    public static Point DefaultViewOffset = new(-(DefaultWidth / 2), -(DefaultHeight / 2));
+    public static Point DefaultCameraPosition = new(-(DefaultWidth / 2), -(DefaultHeight / 2));
 
     private int _writeRowIndex = 0;
     private int _writeColumnIndex = 0;
 
     private TerminalPixel[][] _previousFrame;
     private bool _firstFrameRendered = false;
+
+    public Rectangle _renderRegion => new (CameraPosition.X, CameraPosition.Y, Width, Height);
 
     public TerminalDisplay()
     {
@@ -35,7 +37,14 @@ public class TerminalDisplay
     {
         foreach (TerminalPixel pixel in terminalRenderable.Render())
         {
-            _pixelDrawList[pixel.Position] = pixel;
+            if (_renderRegion.Contains(pixel.Position))
+                _pixelDrawList[pixel.Position] = pixel;
+            // else
+            // {
+            //     Console.Clear();
+            //     Console.WriteLine($"CULLED PIXEL: {pixel.Position} {pixel.BackgroundColor}");
+            //     Console.ReadLine();
+            // }
         }
 
         return terminalRenderable;
@@ -154,11 +163,11 @@ public class TerminalDisplay
 
     public void MoveCamera(Point offset)
     {
-        ViewOffset.X += offset.X;
-        ViewOffset.Y += offset.Y;
+        CameraPosition.X += offset.X;
+        CameraPosition.Y += offset.Y;
     }
 
-    public Point FramePositionToWorldPosition(Point pos) => new(pos.X + ViewOffset.X, pos.Y + ViewOffset.Y);
+    public Point FramePositionToWorldPosition(Point pos) => new(pos.X + CameraPosition.X, pos.Y + CameraPosition.Y);
 
     public void MoveCamera(int xOffset, int yOffset) => MoveCamera(new Point(xOffset, yOffset));
 }

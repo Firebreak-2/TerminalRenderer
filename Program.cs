@@ -14,7 +14,7 @@ internal static class Program
         {
             display.Draw(new TerminalPixel(Color.Aqua)
             {
-                Position = new Point(0, -(y++ % TerminalDisplay.DefaultViewOffset.Y * 2) - TerminalDisplay.DefaultViewOffset.Y)
+                Position = new Point(0, -(y++ % TerminalDisplay.DefaultCameraPosition.Y * 2) - TerminalDisplay.DefaultCameraPosition.Y)
             });
             
             display.Render();

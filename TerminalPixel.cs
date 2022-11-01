@@ -60,7 +60,7 @@ public struct TerminalPixel : ITerminalRenderable
 
     public Point GetFramePosition(Point viewOffset) => new(Position.X - viewOffset.X, Position.Y - viewOffset.Y);
     
-    public Point GetFramePosition(TerminalDisplay display) => GetFramePosition(display.ViewOffset);
+    public Point GetFramePosition(TerminalDisplay display) => GetFramePosition(display.CameraPosition);
     
     public IEnumerable<TerminalPixel> Render() => new[] {this};
 }

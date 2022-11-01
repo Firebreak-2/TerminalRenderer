@@ -32,6 +32,13 @@ public class TerminalRectangle : ITerminalRenderable
             BottomRight.Y = value + h;
         }
     }
+
+    public TerminalRectangle(Rectangle rectangle, TerminalPixel pixels)
+    {
+        TopLeft = new Point(rectangle.Left, rectangle.Top);
+        BottomRight = new Point(rectangle.Right, rectangle.Bottom);
+        PixelType = pixels;
+    }
     
     public TerminalRectangle(Point topLeft, Point bottomRight, TerminalPixel pixels)
     {
