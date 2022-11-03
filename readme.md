@@ -47,6 +47,6 @@ Output:
 ![The render output](https://i.imgur.com/u57ezfi.png)
 
 # More Advanced Rendering
-This library allows and is optimized for rendering more than once. This means that animations or dynamic rendering is possible.
+This library allows and is optimized for rendering more than once, meaning rendering animations is possible.
 ![Rainbow spinny thing](https://i.imgur.com/GT6VjUg.gif)
 
